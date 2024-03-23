@@ -92,6 +92,8 @@ Next, automated feature selection available within the R Caret package was appli
 as the response and all other variables as predictors, the output of the feature importance rating
 is as follows:
 
+![variableimportance](https://github.com/schr0841/medxoom-2020/blob/main/images/variableimportance.jpeg)
+
 ## Model Creation and Analysis 
 
 For this purpose the metric, FlipError, was defined as the fraction of test points which were classified further than an adjacent bucket:
