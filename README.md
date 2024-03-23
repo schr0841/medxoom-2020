@@ -65,3 +65,41 @@ names were edited to reduce their length, for ease of model building in R. Lastl
 data were filtered so that only the relevant years of 2015, 2016 and 2017 were included.
 There are 4754 observations and 66 predictors total. This file had been included in the
 zip folder.
+
+
+## Exploratory Analysis and Variable Selection
+
+Starting with GregsData.csv, an attempt was made to find the best subset of predictors for the
+Relative Price for Outpatient Services (RPO). The reason this variable was chosen instead of
+Relative Price for Inpatient and Outpatient Services (RPIO) was there exists more labeled data
+points to train on - 1577 for RPO as opposed to 798 for RPIO. The reason for this is that we
+hoped to obtain better predictions for more hospitals overall.
+
+There are 66 variables to work with in GregsData.csv. However, not all of these are useful in the
+modeling process. Some automated feature selection methods were performed to help us
+choose a subset of these variables. First, correlation analysis was used to see if any of the
+numeric predictors were highly correlated with RPO. The results of this are displayed visually:
+
+Correlation Plot of Continuous Variables
+
+![corrplot](https://github.com/schr0841/medxoom-2020/blob/main/images/corrplot.png)
+
+In general it is best to avoid features with a high correlation to RPO, as this may lead to
+problems in the modelling process such as multicollinearity. The predictors that are highly
+correlated with RPO are RPIO, Standardized Price per Inpatient Stay and Standardized Price
+per Outpatient Service. The choice was made to eliminate these variables from consideration.
+Next, automated feature selection available within the R Caret package was applied. With RPO
+as the response and all other variables as predictors, the output of the feature importance rating
+is as follows:
+
+## Model Creation and Analysis 
+
+For this purpose the metric, FlipError, was defined as the fraction of test points which were classified further than an adjacent bucket:
+
+$$
+\text { FlipError }=\sum_{i=1}^n\left\{\mid \text{ predict }_i-\text{ ref }_i \mid>1\right\}
+$$
+
+We will use this metric in evaluation of model pperformance.
+
+
