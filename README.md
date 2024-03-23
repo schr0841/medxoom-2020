@@ -1,7 +1,8 @@
 # medxoom-2020
 
-Practicum project for the Georgia Institute of Technology M.S. in Analytics. Completed project in December 2020 working with partner Mary Munro. 
+Practicum project for the Georgia Institute of Technology M.S. in Analytics. Completed project in December 2020 working with partner Mary Munro.
 
+The file medxoom_clean.R contains all code used in analysis & to generate images.
 
 ## Project Overview
 
@@ -257,4 +258,73 @@ training set is compared against the percentage of flip rate errors that are pro
 States on or above the black line are considered “normal,” and states under the red line are
 considered “anomalous” since they are responsible for more errors than they should be:
 
+### Percent Representation in Data vs Error in Prediction for each US State (5 bins)
+
 ![flipanalysis](https://github.com/schr0841/medxoom-2020/blob/main/images/flipanalysis.png)
+
+## Final Model
+
+Using the above framework, it was determined that Louisiana, Tennessee and Washington were
+anomalous, and hence two separate models were built: one with just LA, TN, and WA data, and
+then the rest of the data with those states removed. The predictions for these two models were
+then combined, and better performance overall was obtained .
+Using the same general set of models as in the initial modeling round, the following results were
+obtained:
+
+![results2](https://github.com/schr0841/medxoom-2020/blob/main/images/results2.png)
+
+
+It is clear which models should be combined: the GBM classifier for the first set of data is either
+equal to or better than the other models, and the first RF model for the second data is similar.
+Combining these together yields a 6.99% flip error rate.
+
+![results3](https://github.com/schr0841/medxoom-2020/blob/main/images/results3.png)
+
+
+![results4](https://github.com/schr0841/medxoom-2020/blob/main/images/results4.png)
+
+In the 5 bucket case, it is less clear which models to select. For the LA, TN and WA data the
+best performing model on both metrics is RF. In the remaining data case, we have chosen to
+minimize the flip error rate instead of maximize accuracy. Thus again, the RF model is selected.
+Combining these predictions together yields a flip error rate of 21.2%. This is considered the
+most promising model overall, as nearly 79% of hospitals are labeled correctly to within one bin.
+
+## Conclusions
+
+1. All of our models placed high importance on the following RAND variables: Total margin,
+Cost to charge ratio, beds. More details about these variables:
+- Total_margin is a derived variable, coming from the ratio of net income to the
+sum of net patient revenue and all other income. It is a measure of profitability of
+the hospitals.
+- ‘Beds’ measures the inpatient capacity of the hospital.
+- The cost-to-charge ratio is the costs of the procedure divided by the amount
+charged to patients, for all inpatient, ancillary, and outpatient centers. This is a
+measure of the markup associated with hospital procedures.
+2. Despite somewhat different approaches, both of our best-performing models obtained
+around 21% flip error on our test data for the 5-bin case.
+3. Incorporating State-level differences when creating models. Both of our results showed
+that State was an important factor in model performance, so when building future models
+it is recommended to incorporate State in some way.
+
+## Further areas for exploration:
+
+1. Model stacking: Attempts were made to use model stacking in an effort to improve the
+overall performance of the individual models, but this ended up yielding very marginal
+performance gains. This may either be due to our inexperience with how stacking works,
+or our inexperience with the h2o package in R which the predictive models were built.
+More time could be spent in this area to determine models that are more appropriate for
+stacking, potentially leading to an increase in performance.
+2. The original plan was to stack our models together to harness the power of diversity in
+approaches for yielding less correlated results. However, we ran into problems stacking
+models built from different datasets. Ideally we would like to figure out how to make this
+work.
+3. More Ranking Algorithms. We ranked the hospitals by classifying into 5 buckets with
+equivalent numbers of points, then allowing misclassification into adjacent buckets. It
+would be beneficial to experiment with more complex algorithms, such as
+LambdaMART.
+4. All of our models exhibited high ranking errors for a few states. While for some states we
+attributed this to their high contribution to test data, it would be ideal to investigate these
+states individually. Perhaps there are more explanatory variables, or perhaps there are
+discrepancies in the data for these States.
+5. Incorporate recently released RAND data (updated October 2020).
+
