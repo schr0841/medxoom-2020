@@ -163,6 +163,34 @@ considered as being anything more than 1 bin away from the actual value. We reca
 FlipRate from before: this is defined as the fraction of test points which were classified further
 than one adjacent bucket.
 
+Example of GLM model:
+
+```r
+X <- names(df)[1:24]
+Y <- names(df)[25]
+
+###########################################################
+# Train & cross-validate a GLM model
+best_glm <- h2o.glm(
+  x = X, y = Y, training_frame = train_h2o, alpha = 0.1,
+  remove_collinear_columns = TRUE, nfolds = 10, fold_assignment = "Modulo",
+  keep_cross_validation_predictions = TRUE, seed = 123
+)
+
+#Calculate performance based on confusion matrix
+best_glm_perf <- h2o.confusionMatrix(best_glm, newdata = test)
+best_glm_perf
+
+acc_glm_3 <-1- best_glm_perf[4,4]
+
+
+#Save relevant predictions and find error
+predict <- h2o.predict(object = best_glm, newdata = test)
+test$predictedRPO<-predict[,1]
+error_glm_3 <- return_error_3(test)
+test$predictedRPO<-NULL
+
+```
 
 
 
