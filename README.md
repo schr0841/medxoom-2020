@@ -163,7 +163,7 @@ considered as being anything more than 1 bin away from the actual value. We reca
 FlipRate from before: this is defined as the fraction of test points which were classified further
 than one adjacent bucket.
 
-Example of GLM model:
+Example of Multinomial regression GLM model with 3 buckets using h2o R package:
 
 ```r
 X <- names(df)[1:24]
@@ -193,4 +193,54 @@ test$predictedRPO<-NULL
 ```
 
 
+Example of Random Forest model with 3 buckets using h2o R package:
 
+```r
+###########################################################
+# Train & cross-validate a RF model
+best_rf <- h2o.randomForest(
+  x = X, y = Y, training_frame = train_h2o, ntrees = 100, #mtries = 20,
+  max_depth = 30, min_rows = 1, sample_rate = 0.4, nfolds = 10,
+  fold_assignment = "Modulo", keep_cross_validation_predictions = TRUE,
+  seed = 123, stopping_rounds = 50, stopping_metric = "misclassification",
+  stopping_tolerance = 0
+)
+
+best_rf_perf <- h2o.confusionMatrix(best_rf, newdata = test)
+best_rf_perf
+
+acc_rf_3 <-1- best_rf_perf[4,4]
+
+
+#Save relevant predictions and find error
+predict <- h2o.predict(object = best_rf, newdata = test)
+test$predictedRPO<-predict[,1]
+error_rf_3 <- return_error_3(test)
+test$predictedRPO<-NULL
+```
+
+Example of Gradient Boosting Machine model with 3 buckets using h2o R package:
+
+```r
+###########################################################
+# Train & cross-validate a GBM model
+best_gbm <- h2o.gbm(
+  x = X, y = Y, training_frame = train_h2o, ntrees = 100, learn_rate = 0.01,
+  max_depth = 5, min_rows = 5, sample_rate = 0.5, nfolds = 10,
+  fold_assignment = "Modulo", keep_cross_validation_predictions = TRUE,
+  seed = 123, stopping_rounds = 100, stopping_metric = "misclassification",
+  stopping_tolerance = 0
+)
+
+best_gbm_perf <- h2o.confusionMatrix(best_rf, newdata = test)
+best_gbm_perf
+
+acc_gbm_3 <-1- best_gbm_perf[4,4]
+
+
+#Save relevant predictions and find error
+predict <- h2o.predict(object = best_gbm, newdata = test)
+test$predictedRPO<-predict[,1]
+error_gbm_3 <- return_error_3(test)
+test$predictedRPO<-NULL
+```
