@@ -244,3 +244,9 @@ test$predictedRPO<-predict[,1]
 error_gbm_3 <- return_error_3(test)
 test$predictedRPO<-NULL
 ```
+
+## Basic model results
+
+![basicmodelresults](https://github.com/schr0841/medxoom-2020/blob/main/images/basicmodelresults.png)
+
+
