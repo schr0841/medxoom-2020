@@ -17,10 +17,10 @@ library(h2o)
 # PART 1 - LOAD DATASET
 
 #Load Data
-# new_data2 <- read_csv("GregsData.csv")
+new_data2 <- read_csv("GregsData.csv")
 
 # path="C:\Users\schre\OneDrive\Desktop\FlashDrive\Practicum\PractData\gtmsa_practicum_datasets"
-new_data2 <- read_csv("C:/Users/schre/OneDrive/Desktop/FlashDrive/Practicum/PractData/gtmsa_practicum_datasets/new_data2.csv")
+#new_data2 <- read_csv("C:/Users/schre/OneDrive/Desktop/FlashDrive/Practicum/PractData/gtmsa_practicum_datasets/new_data2.csv")
 
 ncol(new_data2)
 
@@ -208,7 +208,7 @@ best_glm <- h2o.glm(
   keep_cross_validation_predictions = TRUE, seed = 123
 )
 
-
+#Calculate performance based on confusion matrix
 best_glm_perf <- h2o.confusionMatrix(best_glm, newdata = test)
 best_glm_perf
 
