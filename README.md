@@ -99,7 +99,7 @@ is as follows:
 For this purpose the metric, FlipError, was defined as the fraction of test points which were classified further than an adjacent bucket:
 
 
-\[ \text{ FlipError }=\sum_{i=1}^n\left\{\mid \text{ predict }_i-\text{ ref }_i \mid>1\right\} \]
+$$ \text{ FlipError }=\sum_{i=1}^n\left\{\mid \text{ predict }_i-\text{ ref }_i \mid>1\right\} $$
 
 
 We will use this metric in evaluation of model pperformance.
