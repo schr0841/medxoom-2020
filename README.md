@@ -249,4 +249,12 @@ test$predictedRPO<-NULL
 
 ![basicmodelresults](https://github.com/schr0841/medxoom-2020/blob/main/images/basicmodelresults.png)
 
+## First Error Analysis and Model Refinement
 
+Next, the flip errors were analyzed geographically to see if there were any improvements that
+can be made. In the following plot, the percent of data points that each state contributes to the
+training set is compared against the percentage of flip rate errors that are produced by the state.
+States on or above the black line are considered “normal,” and states under the red line are
+considered “anomalous” since they are responsible for more errors than they should be:
+
+![flipanalysis](https://github.com/schr0841/medxoom-2020/blob/main/images/flipanalysis.png)
