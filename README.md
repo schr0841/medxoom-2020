@@ -92,6 +92,8 @@ Next, automated feature selection available within the R Caret package was appli
 as the response and all other variables as predictors, the output of the feature importance rating
 is as follows:
 
+Automated Variable Importance Test from the Caret R Package
+
 ![variableimportance](https://github.com/schr0841/medxoom-2020/blob/main/images/variableselection.jpeg)
 
 ## Model Creation and Analysis 
@@ -103,5 +105,64 @@ $$ \text{ FlipError }=\sum_{i=1}^n(\mid \text{ predict }_i-\text{ ref }_i \mid>1
 
 
 We will use this metric in evaluation of model pperformance.
+
+The first seven “important” predictors for inclusion in our variable list were selected, and the rest
+of the variables have been deemed not important. However, there is one caveat here: To run
+both of the above analyses, all missing values in our dataset needed to be discarded, and also
+the non-numerical features were discarded. To perform the final variable selection for use in
+modeling, the rest of the variables in question were studied and a subset of variables was
+selected based on the amount of data present and whether it was thought to be a valuable
+predictor. Through this process 17 additional predictors were identified, to bring the grand total
+to 24. The specific list of variables chosen is as follows:
+
+### Final Variables Chosen for Modeling
+
+1. "Administrative_costs"
+2. "Beds"
+3. "Capital_asset_balances_total"
+4. "costs_total"
+5. "employees_FTEs"
+6. "Medicaid_charges"
+7. "Medicaid_cost"
+8. "impact_cmi"
+9. "mdcr_inpat_charges"
+10. "mdcr_outpat_charges"
+11. "net_income"
+12. "operating_expenses"
+13. "operating_revenues"
+14. "outpat_costs"
+15. "total_assets"
+16. "total_expenses"
+17. "tot_liab_genfund"
+18. "teach_hosp_hcr_Y"
+19. "Hosp_Compare_5_Star_Rat"
+20. "Cost.to.charge_ratio_subtotal"
+21. "total_margin"
+22. "inpat_length_of_stay"
+23. "minor_teaching"
+24. "Cash_flow_margin"
+
+### Initial Model Creation
+
+Using the above variables as predictors, models were constructed with Relative Price for
+Outpatient Services (RPO) as the response variable. RPO was binned into both 3 and 5 buckets
+such that each bucket had roughly the same number of observations, and models were created
+for both bucket versions. Additionally, the data was subset to only include 2017, and it was
+further split 70/30 into train/test sets.The 24 predictors used are listed in the appendix, and 
+10-fold cross-validation was used in each of the models.The initial models chosen were as
+follows:
+
+1. Multinomial logistic regression (GLM)
+2. Random Forest, with 2 different sets of parameters (RF and RF2)
+3. Gradient Boosted Machine (GBM)
+
+These models were then combined into one ensemble which would then give the predictions.
+Aside from accuracy, it was important to keep track of the serious misclassifications, i.e.
+classifying bin 3 as bin 1 and vice versa, and for 5 bins serious misclassifications were
+considered as being anything more than 1 bin away from the actual value. We recall the
+FlipRate from before: this is defined as the fraction of test points which were classified further
+than one adjacent bucket.
+
+
 
 
